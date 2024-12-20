@@ -37,12 +37,60 @@ The maximum possible groupings of adjacent ones are already shown in the figure.
 /* write all the steps invloved */
 
 **PROGRAM**
+SR USING CASE:
+module sr_ff (s, r, clk, rst, q);
+  input s, r, clk, rst;
+  output reg q;
 
-/* Program for flipflops and verify its truth table in quartus using Verilog programming. Developed by: RegisterNumber:
-*/
+  always @(posedge clk or posedge rst)
+ begin
+    if (rst)
+      q <= 0; // Reset the flip-flop
+    else
+ begin
+      case ({s, r}) // S and R control the behavior
+        2'b00: q <= q;    // No change
+        2'b01: q <= 0;    // Reset
+        2'b10: q <= 1;    // Set
+        2'b11: q <= 0;    // Invalid state, typically treated as reset
+      endcase
+    end
+  end
+endmodule
+The 2'b11 state for SR flip-flops is considered invalid because it implies setting and resetting the flip-flop simultaneously, which is logically contradictory. To avoid unpredictable behavior or contention in the circuit, this state is often treated as a reset (or sometimes as a "no change" state) to ensure stability.
+
+(or)
+SR FLIPFLOP
+
+module sr_ff(s,r,clk,q,qbar);
+input s,r,clk;
+output reg q;
+output reg qbar;
+initial 
+begin
+q=0;
+qbar=1;
+end
+always @(posedge clk)
+begin
+   q=s|(~r&q);
+   qbar=r|(~s&~q);
+end
+endmodule
+
+/* Program for flipflops and verify its truth table in quartus using Verilog programming. Developed by:Vishvanadh N 
+
+RegisterNumber:24005857
+
 
 **RTL LOGIC FOR FLIPFLOPS**
 
+![WhatsApp Image 2024-12-20 at 20 00 22_9fc56d1d](https://github.com/user-attachments/assets/d3a83f5c-dfc9-4190-a0bb-32ac431e184b)
+
 **TIMING DIGRAMS FOR FLIP FLOPS**
 
+![WhatsApp Image 2024-12-20 at 20 00 23_0a6f6c70](https://github.com/user-attachments/assets/f43d097f-887b-4116-97cf-fa64a543ecb4)
+
 **RESULTS**
+The SR Flip-Flop is a basic memory element used in digital electronics. It stores a single bit of data and is formed using logic gates, typically NAND or NOR gates. It has two inputs s (Set) and R (Reset), which control the state of the flip-flop. Below is a description of the SR Flip-Flop using a case statement for a result, often used in digital circuit simulations or descriptions.
+
